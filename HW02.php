@@ -76,6 +76,7 @@ foreach ($countries as $country) {
     }
 }
 
+
 // ! Explode special puncuation
 function multiexplode($delimiters, $string)
 {
@@ -159,9 +160,9 @@ function findCountriesInNew($textNewSplit, $listNation)
 if ($_POST) {
 
     // ! 1.Split word by space from $_POST['news']
-    $textNewSplit = multiexplode(array(" ", "'", ",", ".", ")", "("), $_POST['news']);
+    $textNewSplit = multiexplode(array(" ", "'", ",", ".", ")", "(", '"'), $_POST['news']);
     $asiaCountryInNews = findCountriesInNew($textNewSplit, array($asiaCountries, $otherCountries))[0];
-    $otherCountryInNews = findCountriesInNew($textNewSplit, array($asiaCountries, $otherCountries))[1];
+    $otherCountryInNews = array_unique(findCountriesInNew($textNewSplit, array($asiaCountries, $otherCountries))[1]);
 
     echo "<br>";
     echo ("
