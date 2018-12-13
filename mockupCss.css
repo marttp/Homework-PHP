@@ -1,0 +1,32 @@
+body {
+    background-color: wheat
+}
+
+.body-show-detail {
+    margin: 50px 0px;
+    border: 3px black solid;
+    border-radius: 8px;
+    padding: 20px;
+    background-color: rgba(227, 247, 183, 0.7);
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+.profile-box {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 2rem;
+    text-align: center;
+    border: 3px black solid;
+    border-radius: 8px;
+    flex: 0.2;
+}
+
+.box-content {
+    flex: 0.2;
+}
+
+hr {
+    border: 2px solid gray;
+    margin: 1rem 0px;
+}
