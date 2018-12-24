@@ -86,8 +86,14 @@
                                     }
 
                                     if($_POST['loginData'][3]) {
-                                        $email = $_POST['loginData'][3];
-                                        $msg .= "<br><b>Email:</b> $email";
+                                        $preCheckedEmail = $_POST['loginData'][3];
+                                        include("./utility.php");
+                                        if(isValidEmail($preCheckedEmail)){
+                                            $email = strtolower($preCheckedEmail);
+                                            $msg .= "<br><b>Email:</b> $email";
+                                        } else {
+                                            $err .= "<li>Email is not valid</li>";
+                                        }
                                     } else {
                                         $err .= "<li>Empty email</li>";
                                     }
@@ -99,11 +105,18 @@
                                         $err .= "<li>Empty Description</li>";
                                     }
 
-                                    if($_POST['more'][1]) {
-                                        $resume = $_POST['more'][1];
-                                        $msg .= "<br><b>Resume:</b> $resume";
+                                    // if($_POST['more'][1]) {
+                                    //     $resume = $_POST['more'][1];
+                                    //     $msg .= "<br><b>Resume:</b> $resume";
+                                    // } else {
+                                    //     $err .= "<li>Empty resume</li>";
+                                    // }
+
+                                    if($_POST['isWebDev']) {
+                                        $question = $_POST['isWebDev'];
+                                        $msg .= "<br><b>Are you a web developer:</b> $question";
                                     } else {
-                                        $err .= "<li>Empty resume</li>";
+                                        $err .= "<li>Checked radio question</li>";
                                     }
 
                                     if($err == "") {
@@ -134,18 +147,30 @@
                             echo "<h4>Your Input data:</h4>$msg";
                             include("./registerDB.php");
                             $conn = connectToDatabase();
-                            $isSuccess = saveDataToDB($_POST['person'], $_POST['loginData'], $_POST['more'], $conn);
+                            $isSuccess = saveDataToDB($_POST['person'], $_POST['loginData'], $_POST['more'], $_POST['isWebDev'],$conn);
+
                             if($isSuccess){
                                 echo "<h5>Your data already add to database</h5>";
                             } else {
                                 echo "<h5>Something error. Please try again</h5>";
+                            }
+                            
+                            if(is_uploaded_file($_FILES['file']['tmp_name'])) {
+
+                                $isSuccess = uploadPhoto($_FILES);
+
+                                if($isSuccess){
+                                    echo "<h5>File uploaded to database success</h5>";
+                                } else {
+                                    echo "<h5>Failed to upload file to database. Please try again</h5>";
+                                }
                             }
                             echo("</div>");
                             echo("</article>");
                         }
                     ?>
                     <h5 class="title is-5">Personal information</h5>
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         <div class="columns">
                             <div class="column is-half">
                                 <div class="field">
@@ -278,7 +303,8 @@
                             <div class="file is-boxed">
                                 <label class="file-label">
                                     <label class="label">Resume</label>
-                                    <input class="file-input" type="file" name="more[]">
+                                    <input type="hidden" name="MAX_FILE_SIZE" value="65535">
+                                    <input class="file-input" type="file" name="file" accept="image/*" required>
                                     <span class="file-cta">
                                     <span class="file-icon">
                                         <i class="fas fa-upload"></i>
@@ -290,9 +316,21 @@
                                 </label>
                             </div>
                         </div>
-
                         <hr>
-
+                        <div class="field">
+                            <label class="label">Are you a web developer?</label>
+                            <div class="control">
+                                <label class="radio">
+                                <input type="radio" name="isWebDev" value="Yes" checked>
+                                    Yes
+                                </label>
+                                <label class="radio">
+                                <input type="radio" name="isWebDev" value="No">
+                                    No
+                                </label>
+                            </div>
+                        </div>
+                        <hr>
                         <div class="field">
                             <div class="control">
                                 <label class="checkbox">
